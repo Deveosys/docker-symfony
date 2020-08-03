@@ -39,7 +39,7 @@ const init = async () => {
 		return;
 	}
 
-	const appName = response.appName.replace(/ /g, "_");
+	const appName = response.appName.toLowerCase().replace(/ /g, "_");
 	generateDockerCompose(appName);
 	adaptNginxConfiguration(appName);
 
@@ -83,7 +83,7 @@ const cloneGitRepository = (repository) => {
 		console.log("\x1b[32mDone\x1b[89m\x1b[0m");
 
 		console.log("Prepare Symfony project ...");
-		execSync("mv app/DockerFile tmp_app");
+		execSync("mv app/Dockerfile tmp_app");
 		execSync("rm -rf app");
 		execSync("mv tmp_app app");
 		execSync("rm -rf app/.git");
