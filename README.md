@@ -32,10 +32,21 @@ symfony server:start
 yarn watch
 ```
 
-If you want to test the docker setup (in root directory) :
+**If you want to test the docker setup on localhost :**
+
+-   Add port binding on `docker-compose.yml` file under nginx donfiguration:
 
 ```
-yarn build -p 8089:80
+my_app_nginx:
+    ...
+    ports:
+        - 8080:80
+```
+
+-   Then build container
+
+```
+yarn build
 ```
 
 ## Production
