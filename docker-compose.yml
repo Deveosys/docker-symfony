@@ -24,9 +24,4 @@ services:
         working_dir: /app
         volumes:
             - ./app:/app
-        command: yarn prod
-
-networks:
-    default:
-        external:
-            name: proxy_default
+        command: yarn docker:prod
