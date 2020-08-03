@@ -1,5 +1,8 @@
 # Docker symfony
 
+A simple Symfony with Docker generation tool.
+It comes with a Symfony boilerplate project (https://github.com/Deveosys/symfony-react-bootstrap), but the setup lets you choose to use your own existing Symfony project or even to create a new one.
+
 ## Usage
 
 ```
@@ -34,7 +37,7 @@ yarn watch
 
 **If you want to test the docker setup on localhost :**
 
--   Add port binding on `docker-compose.yml` file under nginx donfiguration:
+-   Add ports binding on `docker-compose.yml` file under nginx donfiguration:
 
 ```
 my_app_nginx:
