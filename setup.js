@@ -35,7 +35,7 @@ const init = async () => {
 
 	const response = await prompts(steps);
 	if (!response.appName || response.symfonyProject == undefined) {
-		console.log("\x1b[31m\nSetup ended befor finish \n\x1b[89m\x1b[0m");
+		logStateMessage("\x1b[31m\nSetup ended befor finish \n\x1b[89m\x1b[0m");
 		return;
 	}
 
@@ -47,20 +47,54 @@ const init = async () => {
 		const repository = response.customGitRepo || defaultGitRepository;
 		cloneGitRepository(repository);
 	} else {
-		console.log("\x1b[33m\nNo symfony project generated, you have to do it in ./app directory.\x1b[89m\x1b[0m");
+		logStateMessage("\x1b[33m\nNo symfony project generated, you have to do it in ./app directory.\x1b[89m\x1b[0m");
 	}
 
-	console.log("\x1b[32m\nDocker Symfony project " + response.appName + " generated.\n\x1b[89m\x1b[0m");
+	removeCurrentGit();
+
+	console.log(
+		"\x1b[32m\nDocker Symfony project " + response.appName + " generated and ready to use.\n\x1b[89m\x1b[0m"
+	);
+	secondPart();
+};
+
+const steps2 = [
+	{
+		type: "confirm",
+		name: "gitInit",
+		message: "Do you want to generate a new git repository ? (git init)",
+		initial: true,
+	},
+];
+
+const secondPart = async () => {
+	const response = await prompts(steps2);
+	if (response.gitInit == undefined) {
+		logStateMessage("\x1b[31m\nSetup ended befor finish \n\x1b[89m\x1b[0m");
+		return;
+	}
+
+	if (response.gitInit) gitInit();
+
+	console.log("\n\n-----------------      Prod      -----------------\n");
+	console.log("    $ docker-compose up --build -d");
+
+	console.log("\n-----------------      Dev      -----------------\n");
+	console.log("    $ cd app && composer install && yarn");
+	console.log("    $ symfony server:start");
+	console.log("    $ yarn watch");
+
+	console.log("\x1b[32m\n" + "*****************    ENJOY !    *****************" + "\n\x1b[89m\x1b[0m");
 };
 
 const generateDockerCompose = (appName) => {
-	console.log("\nAdapting docker-compose.yml...");
+	logStateMessage("\nAdapting docker-compose.yml...");
 	const filePath = "./docker-compose.yml";
 	replaceInFile(filePath, /\$APP_NAME/g, appName);
 };
 
 const adaptNginxConfiguration = (appName) => {
-	console.log("Adapting Nginx configuration...");
+	logStateMessage("Adapting Nginx configuration...");
 	const filePath = "./nginx/conf.d/default.conf";
 	replaceInFile(filePath, /\$APP_NAME/g, appName);
 };
@@ -70,7 +104,7 @@ const replaceInFile = (filePath, searchValue, replaceValue) => {
 		const data = fs.readFileSync(filePath, "utf8");
 		const result = data.replace(searchValue, replaceValue);
 		fs.writeFileSync(filePath, result, "utf8");
-		console.log("\x1b[32mDone\x1b[89m\x1b[0m");
+		logDone();
 	} catch (err) {
 		console.error(err);
 	}
@@ -78,28 +112,40 @@ const replaceInFile = (filePath, searchValue, replaceValue) => {
 
 const cloneGitRepository = (repository) => {
 	try {
-		console.log("Cloning from " + repository + " ...");
+		logStateMessage("Cloning from " + repository + " ...");
 		execSync("git clone " + repository + " tmp_app");
-		console.log("\x1b[32mDone\x1b[89m\x1b[0m");
+		logDone();
 
-		console.log("Prepare Symfony project ...");
+		logStateMessage("Prepare Symfony project...");
 		execSync("mv app/Dockerfile tmp_app");
 		execSync("rm -rf app");
 		execSync("mv tmp_app app");
 		execSync("rm -rf app/.git");
-		console.log("\x1b[32mDone\x1b[89m\x1b[0m");
+		logDone();
 	} catch (error) {
 		console.error(error);
 	}
 };
 
+const removeCurrentGit = () => {
+	logStateMessage("Removing current Git project...");
+	execSync("rm -rf .git");
+	logDone();
+};
+
+const gitInit = () => {
+	logStateMessage("Generating new Git project...");
+	execSync("git init");
+	logDone();
+};
+
 console.clear();
 init();
-// rl.on("close", function () {
-// 	const text = "\nProject configured." + "\nDo you want to remove Setup script will be removed.";
-// 	rl.question("Where do you live ? ", function (country) {
-// 		console.log(" ");
 
-// 		process.exit(0);
-// 	});
-// });
+const logStateMessage = (message) => {
+	process.stdout.write(message);
+};
+
+const logDone = () => {
+	process.stdout.write(" \x1b[32mDone\x1b[89m\x1b[0m\n");
+};
