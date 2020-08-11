@@ -1,12 +1,12 @@
 # Docker symfony
 
-A simple Symfony with Docker generation tool.
+A simple Dockerized Symfony project generation tool.
 It comes with a Symfony boilerplate project (https://github.com/Deveosys/symfony-react-bootstrap), but the setup lets you choose to use your own existing Symfony project or even to create a new one.
 
 ## Usage
 
 ```
-git clone git@github.com:Deveosys/docker-symfony.git
+$ git clone git@github.com:Deveosys/docker-symfony.git
 ```
 
 ### Setup
@@ -14,15 +14,15 @@ git clone git@github.com:Deveosys/docker-symfony.git
 With yarn
 
 ```
-yarn
-yarn setup
+$ yarn
+$ yarn setup
 ```
 
 With npm
 
 ```
-npm install
-npm run setup
+$ npm install
+$ npm run setup
 ```
 
 ## Dev
@@ -31,8 +31,8 @@ I recommand using symfony server for development.
 In app/ directory :
 
 ```
-symfony server:start
-yarn watch
+$ symfony server:start
+$ yarn dev-server
 ```
 
 **If you want to test the docker setup on localhost :**
@@ -49,11 +49,11 @@ my_app_nginx:
 -   Then build container
 
 ```
-yarn build
+$ docker-compose up --build
 ```
 
 ## Production
 
 ```
-yarn build
+$ docker-compose up --build -d
 ```
