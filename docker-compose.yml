@@ -28,3 +28,8 @@ services:
         volumes:
             - ./app:/app
         command: yarn docker:prod
+
+networks:
+    default:
+        external:
+            name: proxy_default
