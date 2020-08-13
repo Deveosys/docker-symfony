@@ -76,14 +76,14 @@ const secondPart = async () => {
 	console.log("    $ docker-compose up --build -d");
 
 	console.log("\n-----------------      Dev      -----------------\n");
-	console.log("    $ cd app && composer install && yarn");
+	console.log("    $ cd app && composer install && yarn && php bin/console doctrine:migrations:migrate");
 	console.log("    $ symfony server:start");
-	console.log("    $ yarn watch\n\n");
+	console.log("    $ yarn dev-server\n\n");
 
 	response = await prompts({
 		type: "confirm",
 		name: "callDevCommands",
-		message: "Do you want to execute dev prepration ? (cd app && composer install && yarn)",
+		message: "Do you want to prepare Symfony project for development ?",
 		initial: true,
 	});
 	if (response.callDevCommands == undefined) {
@@ -149,8 +149,8 @@ const gitInit = () => {
 };
 
 const callDevCommands = () => {
-	logStateMessage("Generating new Git project...\n");
-	execSync("cd app && composer install && yarn");
+	logStateMessage("Symfony project preparation...\n");
+	execSync("cd app && composer install && yarn && php bin/console doctrine:migrations:migrate --no-interaction");
 	logDone();
 };
 
