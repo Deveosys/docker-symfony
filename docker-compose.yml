@@ -2,6 +2,7 @@ version: "3.8"
 
 services:
     $APP_NAME_app:
+        container_name: $APP_NAME_app
         build:
             context: ./app
         working_dir: /app
@@ -9,6 +10,7 @@ services:
             - ./app:/app
 
     $APP_NAME_nginx:
+        container_name: $APP_NAME_nginx
         build:
             context: ./nginx
         depends_on:
@@ -20,6 +22,7 @@ services:
             - ./nginx/conf.d/:/etc/nginx/conf.d
 
     $APP_NAME_node:
+        container_name: $APP_NAME_node
         image: node:12-alpine
         working_dir: /app
         volumes:
