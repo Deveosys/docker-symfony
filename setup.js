@@ -150,7 +150,9 @@ const gitInit = () => {
 
 const callDevCommands = () => {
 	logStateMessage("Symfony project preparation...\n");
-	execSync("cd app && composer install && yarn && php bin/console doctrine:migrations:migrate --no-interaction");
+	execSync("cd app && composer install");
+	execSync("cd app && yarn");
+	execSync("cd app && php bin/console doctrine:migrations:migrate --no-interaction");
 	logDone();
 };
 
