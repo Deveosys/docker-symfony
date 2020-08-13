@@ -78,7 +78,7 @@ const secondPart = async () => {
 	console.log("\n-----------------      Dev      -----------------\n");
 	console.log("    $ cd app && composer install && yarn");
 	console.log("    $ symfony server:start");
-	console.log("    $ yarn watch");
+	console.log("    $ yarn watch\n\n");
 
 	response = await prompts({
 		type: "confirm",
@@ -91,7 +91,9 @@ const secondPart = async () => {
 		return;
 	}
 
-	console.log("\x1b[32m\n" + "*****************    ENJOY !    *****************" + "\n\x1b[89m\x1b[0m");
+	if (response.callDevCommands) callDevCommands();
+
+	console.log("\x1b[32m\n\n" + "*****************    ENJOY !    *****************" + "\n\x1b[89m\x1b[0m");
 };
 
 const generateDockerCompose = (appName) => {
@@ -119,7 +121,7 @@ const replaceInFile = (filePath, searchValue, replaceValue) => {
 
 const cloneGitRepository = (repository) => {
 	try {
-		logStateMessage("Cloning from " + repository + " ...");
+		logStateMessage("Cloning from " + repository + " ...\n");
 		execSync("git clone " + repository + " tmp_app");
 		logDone();
 
@@ -143,6 +145,12 @@ const removeCurrentGit = () => {
 const gitInit = () => {
 	logStateMessage("Generating new Git project...");
 	execSync("git init");
+	logDone();
+};
+
+const callDevCommands = () => {
+	logStateMessage("Generating new Git project...\n");
+	execSync("cd app && composer install && yarn");
 	logDone();
 };
 
