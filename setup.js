@@ -59,7 +59,7 @@ const init = async () => {
 };
 
 const secondPart = async () => {
-	const response = await prompts({
+	let response = await prompts({
 		type: "confirm",
 		name: "gitInit",
 		message: "Do you want to generate a new git repository ? (git init)",
@@ -80,7 +80,7 @@ const secondPart = async () => {
 	console.log("    $ symfony server:start");
 	console.log("    $ yarn watch");
 
-	const response = await prompts({
+	response = await prompts({
 		type: "confirm",
 		name: "callDevCommands",
 		message: "Do you want to execute dev prepration ? (cd app && composer install && yarn)",
