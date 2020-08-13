@@ -58,17 +58,13 @@ const init = async () => {
 	secondPart();
 };
 
-const steps2 = [
-	{
+const secondPart = async () => {
+	const response = await prompts({
 		type: "confirm",
 		name: "gitInit",
 		message: "Do you want to generate a new git repository ? (git init)",
 		initial: true,
-	},
-];
-
-const secondPart = async () => {
-	const response = await prompts(steps2);
+	});
 	if (response.gitInit == undefined) {
 		logStateMessage("\x1b[31m\nSetup ended befor finish \n\x1b[89m\x1b[0m");
 		return;
@@ -83,6 +79,17 @@ const secondPart = async () => {
 	console.log("    $ cd app && composer install && yarn");
 	console.log("    $ symfony server:start");
 	console.log("    $ yarn watch");
+
+	const response = await prompts({
+		type: "confirm",
+		name: "callDevCommands",
+		message: "Do you want to execute dev prepration ? (cd app && composer install && yarn)",
+		initial: true,
+	});
+	if (response.callDevCommands == undefined) {
+		logStateMessage("\x1b[31m\nSetup ended befor finish \n\x1b[89m\x1b[0m");
+		return;
+	}
 
 	console.log("\x1b[32m\n" + "*****************    ENJOY !    *****************" + "\n\x1b[89m\x1b[0m");
 };
